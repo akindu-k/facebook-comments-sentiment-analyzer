@@ -3,7 +3,7 @@ import { Inputs } from "./components/Inputs";
 import { SentimentPie, SentimentTimeline } from "./components/Charts";
 import { Comments } from "./components/Comments";
 import { Summary } from "./components/Summary";
-import { fetchFacebookData, generateMockComments, aggregateByDay } from "./utils/facebook";
+import { fetchFacebookData, generateMockComments, aggregateByDay, generateAISummary } from "./utils/facebook";
 
 export default function App() {
   const [pageId, setPageId] = useState("");
@@ -61,37 +61,19 @@ export default function App() {
 
   const aggregated = useMemo(() => aggregateByDay(filtered), [filtered]);
 
-  const genSummary = () => {
-    const totalComments = filtered.length;
-    const positiveCount = filtered.filter(c => c.sentiment === 'positive').length;
-    const negativeCount = filtered.filter(c => c.sentiment === 'negative').length;
-    const neutralCount = filtered.filter(c => c.sentiment === 'neutral').length;
-    
-    const positivePerc = totalComments > 0 ? ((positiveCount / totalComments) * 100).toFixed(1) : 0;
-    const negativePerc = totalComments > 0 ? ((negativeCount / totalComments) * 100).toFixed(1) : 0;
-    const neutralPerc = totalComments > 0 ? ((neutralCount / totalComments) * 100).toFixed(1) : 0;
-    
-    setAiSummary(`📊 Analysis Summary (${fromDate} to ${toDate}):
-
-Total Comments Analyzed: ${totalComments}
-
-Sentiment Breakdown:
-• Positive: ${positiveCount} comments (${positivePerc}%)
-• Negative: ${negativeCount} comments (${negativePerc}%)
-• Neutral: ${neutralCount} comments (${neutralPerc}%)
-
-Key Insights:
-${positiveCount > negativeCount ? 
-  "✅ Overall positive sentiment detected. Audience engagement is healthy." : 
-  negativeCount > positiveCount ? 
-  "⚠️ Negative sentiment detected. Consider reviewing content strategy." :
-  "📊 Balanced sentiment. Neutral audience response."
-}
-
-Recommendation: ${totalComments > 50 ? 
-  "Good engagement volume. Monitor sentiment trends." : 
-  "Consider strategies to increase comment engagement."
-}`);
+  const genSummary = async () => {
+    try {
+      const summary = await generateAISummary(filtered, fromDate, toDate);
+      setAiSummary(summary);
+    } catch (error) {
+      console.error('Failed to generate AI summary:', error);
+      // Fallback to local summary generation
+      const totalComments = filtered.length;
+      const positiveCount = filtered.filter(c => c.sentiment === 'positive').length;
+      const negativeCount = filtered.filter(c => c.sentiment === 'negative').length;
+      
+      setAiSummary(`📊 Basic Analysis Summary: ${totalComments} comments analyzed. ${positiveCount} positive, ${negativeCount} negative, ${totalComments - positiveCount - negativeCount} neutral.`);
+    }
   };
 
   // ...existing JSX return statement remains the same...
