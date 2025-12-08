@@ -1,0 +1,19 @@
+{
+  "id": "628047840396049_122155324118865891",
+  "message": "Test 02",
+  "created_time": "2025-12-08T07:26:10+0000",
+  "from": {
+    "name": "Post Automation",
+    "id": "628047840396049"
+  },
+  "permalink_url": "https://www.facebook.com/122155328198865891/posts/122155324118865891",
+  "comments": [
+    {
+      "message": "Hi",
+      "created_time": "2025-12-08T11:20:02+0000",
+      "like_count": 0,
+      "id": "122155324118865891_1567184137934570"
+    }
+  ],
+  "comments_count": 1
+}
