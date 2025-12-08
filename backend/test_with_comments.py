@@ -42,6 +42,8 @@ url = f"https://graph.facebook.com/v19.0/{PAGE_ID}/feed?fields=id,message,create
 print(f"Starting to fetch posts from URL: {url}")
 
 post_count = 0
+all_posts = []  # List to store all posts for the comprehensive file
+
 while url:
     print(f"Fetching posts from URL: {url}")
     response = requests.get(url)
@@ -60,6 +62,9 @@ while url:
         post['comments'] = comments
         post['comments_count'] = len(comments)
         
+        # Add to comprehensive list
+        all_posts.append(post)
+        
         # Create filename based on post ID
         filename = f"posts/post_{post['id'].replace('_', '-')}.json"
         print(f"Saving post {post['id']} to file: {filename}")
@@ -77,5 +82,13 @@ while url:
     else:
         print("No more pages of posts.")
 
+# Save all posts with comments to a comprehensive JSON file
+comprehensive_filename = "all_posts_with_comments.json"
+print(f"Saving all posts to comprehensive file: {comprehensive_filename}")
+with open(comprehensive_filename, "w", encoding="utf-8") as f:
+    json.dump(all_posts, f, indent=2, ensure_ascii=False)
+
 print(f"Finished processing {post_count} posts!")
 print(f"All posts with comments saved in the 'posts/' directory")
+print(f"Comprehensive file saved as: {comprehensive_filename}")
+print(f"Total posts in comprehensive file: {len(all_posts)}")
