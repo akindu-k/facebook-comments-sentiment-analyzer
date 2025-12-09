@@ -21,11 +21,14 @@ export default function App() {
     setLoading(true);
     
     try {
-      // Try to fetch real Facebook data first
+      console.log('Attempting to fetch real Facebook data...');
       const data = await fetchFacebookData({ pageId, accessToken });
       setAllComments(data);
+      setError(""); // Clear any previous errors
     } catch (err) {
-      console.error("Failed to fetch real data, using mock data:", err);
+      console.error("Failed to fetch real data from backend:", err);
+      setError(`Backend connection failed: ${err.message}. Using mock data instead.`);
+      
       // Fallback to mock data
       await new Promise((r) => setTimeout(r, 500));
       const data = generateMockComments({ pageId, accessToken });
@@ -38,6 +41,7 @@ export default function App() {
   const reset = () => {
     setAllComments([]);
     setAiSummary("");
+    setError("");
   };
 
   const filtered = useMemo(() => {
@@ -62,21 +66,42 @@ export default function App() {
   const aggregated = useMemo(() => aggregateByDay(filtered), [filtered]);
 
   const genSummary = async () => {
+    if (filtered.length === 0) {
+      setAiSummary("No comments available for analysis. Please analyze some data first.");
+      return;
+    }
+
     try {
+      console.log('Generating AI summary for', filtered.length, 'comments...');
       const summary = await generateAISummary(filtered, fromDate, toDate);
       setAiSummary(summary);
     } catch (error) {
       console.error('Failed to generate AI summary:', error);
+      
       // Fallback to local summary generation
       const totalComments = filtered.length;
       const positiveCount = filtered.filter(c => c.sentiment === 'positive').length;
       const negativeCount = filtered.filter(c => c.sentiment === 'negative').length;
+      const neutralCount = totalComments - positiveCount - negativeCount;
       
-      setAiSummary(`📊 Basic Analysis Summary: ${totalComments} comments analyzed. ${positiveCount} positive, ${negativeCount} negative, ${totalComments - positiveCount - negativeCount} neutral.`);
+      const fallbackSummary = `📊 Local Analysis Summary
+
+🔢 BASIC METRICS
+• Total Comments: ${totalComments}
+• Date Range: ${fromDate} to ${toDate}
+
+🎭 SENTIMENT BREAKDOWN  
+• Positive: ${positiveCount} (${((positiveCount/totalComments)*100).toFixed(1)}%)
+• Negative: ${negativeCount} (${((negativeCount/totalComments)*100).toFixed(1)}%)
+• Neutral: ${neutralCount} (${((neutralCount/totalComments)*100).toFixed(1)}%)
+
+⚠️ Note: AI summary service unavailable. This is a basic local analysis.`;
+      
+      setAiSummary(fallbackSummary);
     }
   };
 
-  // ...existing JSX return statement remains the same...
+  // ...rest of your JSX remains exactly the same...
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Hero Section */}
