@@ -37,25 +37,25 @@ A clean single-page dashboard visualizes insights using charts, filters, and tim
 
 ## 🎥 Demo Video
 
-📌 *Add your YouTube link here*
 
-```
-[![Watch the Demo](https://img.youtube.com/vi/ADD_YOUTUBE_ID_HERE/maxresdefault.jpg)](https://www.youtube.com/watch?v=ADD_YOUTUBE_ID_HERE)
-```
+
+
+[Watch the Demo](https://youtu.be/oEb8ZOcjwcg)
+
 
 ---
 
 ## 📸 Project Snapshots
 
-📌 *Add your screenshot images here*
 
-```
+
+
 <img width="1866" height="853" alt="Screenshot from 2025-12-09 14-49-10" src="https://github.com/user-attachments/assets/ad1bf37b-1701-4648-bea3-bfbbbc74e6d5" />
 <img width="1866" height="853" alt="Screenshot from 2025-12-09 14-49-19" src="https://github.com/user-attachments/assets/de0ba05e-270e-4ab5-9003-2cd4cc7cc203" />
 <img width="1866" height="853" alt="Screenshot from 2025-12-09 14-50-10" src="https://github.com/user-attachments/assets/80a3f67d-1b3e-4e69-a190-e1b033c6a3bf" />
 <img width="1849" height="557" alt="Screenshot from 2025-12-09 14-50-27" src="https://github.com/user-attachments/assets/a455e3d0-6334-40ba-9d1d-a970ec012db5" />
 
-```
+
 
 ---
 
@@ -66,4 +66,4 @@ A clean single-page dashboard visualizes insights using charts, filters, and tim
 3. Store + aggregate sentiment categories.
 4. Display graph-based visual insights.
 
----
+
